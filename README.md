@@ -4,6 +4,8 @@ Generates an EPUB file containing all 7 books.
 I made this during my spare time to read this story on my Kindle, although others are welcome to use this script for their personal use. If you do not want to run the script, this repository already hosts the complete 7-book worth readily downloadable [EPUB file](https://github.com/GabbyNEW/APGtE_Scraper/blob/main/A%20Practical%20Guide%20To%20Evil.epub).
 ![image](https://user-images.githubusercontent.com/55874439/156875638-a270c4a4-81e1-4a18-92c4-8bc2a82755a4.png)
 
+The extra chapters are not currently included, but I have plans to update the script to extract those as well.
+
 ## Setting Up The Script Locally
 ### Prerequisites
 Python 3.6+ must be installed on your system. 
