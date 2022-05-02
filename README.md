@@ -15,8 +15,7 @@ Python 3.6+ must be installed on your system.
 The following modules must be installed using pip: 
 `requests` 
 `EbookLib` 
-`beautifulsoup4` 
-Note that if you're cloning the whole repository, you do not need to install them as they are included in the Python virtual environment.
+`beautifulsoup4`.
 
 ## Installation
 Clone the repository to your local machine. Enable Python virtual environent using `venv` on the root folder. 
