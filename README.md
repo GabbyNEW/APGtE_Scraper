@@ -7,8 +7,6 @@ If you do not want to run the script, this repository already hosts the complete
 
 ![image](https://user-images.githubusercontent.com/55874439/156875638-a270c4a4-81e1-4a18-92c4-8bc2a82755a4.png)
 
-The extra chapters are not currently included, but I have plans to update the script to extract those as well.
-
 ## Setting Up The Script Locally
 ### Prerequisites
 Python 3.6+ must be installed on your system. 
