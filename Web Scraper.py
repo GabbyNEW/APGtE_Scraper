@@ -5,7 +5,7 @@ from ebooklib import epub
 # Global
 currentBookTitle = ""
 currentBookNumber = 0
-book = None
+book, extras = None, None
 spine = ["nav"]
 book1, book2, book3, book4, book5, book6, book7 = [], [], [], [], [], [], [] # Table of Contents subsections
 x = 0
@@ -18,6 +18,12 @@ def initializeEpubMetadata():
     book.add_author("ErraticErrata")
 
 def main():
+    # Load text file containing the extra chapter titles
+    global extras
+    extras_file = open("Extra Chapters.txt", 'r')
+    data = extras_file.read()
+    extras = data.split("\n")
+
     print("Press ENTER to begin book scraping of A Practical Guide To Evil.", end=" ")
     input()
 
@@ -54,12 +60,23 @@ def iterateChapters(chapters):
         extractChapter(url, currentChapterTitle) # Extract content
         
 def extractChapter(url, currentChapterTitle):
-    global book
+    global book, extras
     chapterPage = requests.get(url) # Visit the Chapter page
     chapterSoup = BeautifulSoup(chapterPage.content, "html.parser") # Chapter page HTML content
+
+    # Get information on the succeeding chapter to identify an 'Extra' chapter
+    nextChapterText = chapterSoup.find("div", class_="nav-next").findChild("h4", recursive=True).text
+    nextChapterLink = chapterSoup.find("div", class_="nav-next").findChild("a", recursive=True)['href']
+
+    # Proceed to extract the text of the chapter
     content = chapterSoup.find("div", class_="entry-content") # Chapter main text body
     for s in chapterSoup.select("div", id="jp-post-flair") : s.extract() # Remove footer buttons
     appendChapterToBook(content, currentChapterTitle)
+
+    # Determine if an Extra chapter succeeds the current chapter
+    if nextChapterText in extras:
+        print("Extra chapter detected. Appending extra chapter...")
+        extractChapter(nextChapterLink, nextChapterText) # Fancy recursive XD
 
 def appendChapterToBook(content, currentChapterTitle):
     global x
