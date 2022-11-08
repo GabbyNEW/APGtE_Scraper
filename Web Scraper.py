@@ -65,8 +65,9 @@ def extractChapter(url, currentChapterTitle):
     chapterSoup = BeautifulSoup(chapterPage.content, "html.parser") # Chapter page HTML content
 
     # Get information on the succeeding chapter to identify an 'Extra' chapter
-    nextChapterText = chapterSoup.find("div", class_="nav-next").findChild("h4", recursive=True).text
-    nextChapterLink = chapterSoup.find("div", class_="nav-next").findChild("a", recursive=True)['href']
+    nextChapterInfo = chapterSoup.find("div", class_="nav-next").findChild("a", recursive=True)
+    nextChapterText = next(nextChapterInfo.stripped_strings)
+    nextChapterLink = nextChapterInfo['href']
 
     # Proceed to extract the text of the chapter
     content = chapterSoup.find("div", class_="entry-content") # Chapter main text body
