@@ -54,6 +54,8 @@ def iterateChapters(chapters):
     chaptersSoup = BeautifulSoup(str(chapters), "html.parser") # Contains a list (not the Python kind of list) of chapters of a given book number
 
     for chapter in chaptersSoup.find_all("li"):
+        if (not chapter.string): # Book 2 has an extra empty CSS tag as the first list element, filter it out
+            continue
         chapterSoup = BeautifulSoup(str(chapter), "html.parser")
         currentChapterTitle = currentBookTitle + chapterSoup.find('a').text # Get Chapter Title
         url = chapterSoup.find('a')['href'] # Get URL of Chapter
