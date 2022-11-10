@@ -54,19 +54,30 @@ def iterateChapters(chapters):
     chaptersSoup = BeautifulSoup(str(chapters), "html.parser") # Contains a list (not the Python kind of list) of chapters of a given book number
 
     for chapter in chaptersSoup.find_all("li"):
+        if (not chapter.string): # Book 2 has an extra empty CSS tag as the first list element, filter it out
+            continue
+        
         chapterSoup = BeautifulSoup(str(chapter), "html.parser")
         currentChapterTitle = currentBookTitle + chapterSoup.find('a').text # Get Chapter Title
         url = chapterSoup.find('a')['href'] # Get URL of Chapter
         extractChapter(url, currentChapterTitle) # Extract content
         
 def extractChapter(url, currentChapterTitle):
-    global book, extras
+    global book, extras, x
     chapterPage = requests.get(url) # Visit the Chapter page
     chapterSoup = BeautifulSoup(chapterPage.content, "html.parser") # Chapter page HTML content
-
+ 
     # Get information on the succeeding chapter to identify an 'Extra' chapter
-    nextChapterText = chapterSoup.find("div", class_="nav-next").findChild("h4", recursive=True).text
-    nextChapterLink = chapterSoup.find("div", class_="nav-next").findChild("a", recursive=True)['href']
+    if x == 317:
+        nextChapterText = 'Peregrine I'
+        nextChapterLink = 'https://practicalguidetoevil.wordpress.com/2018/12/03/peregrine-i/'
+    elif x == 462:
+        nextChapterText = 'Winter IV'
+        nextChapterLink = 'https://practicalguidetoevil.wordpress.com/2020/01/06/winter-iv/'
+    else:
+        nextChapterInfo = chapterSoup.find("div", class_="nav-next").findChild("a", recursive=True)
+        nextChapterText = next(nextChapterInfo.stripped_strings)
+        nextChapterLink = nextChapterInfo['href']
 
     # Proceed to extract the text of the chapter
     content = chapterSoup.find("div", class_="entry-content") # Chapter main text body
@@ -81,7 +92,7 @@ def extractChapter(url, currentChapterTitle):
 def appendChapterToBook(content, currentChapterTitle):
     global x
     global book, spine, book1, book2, book3, book4, book5, currentBookNumber
-    epubChapter = epub.EpubHtml(title=currentChapterTitle, file_name=str(x) + ".xhtml", lang='hr')
+    epubChapter = epub.EpubHtml(title=currentChapterTitle, file_name=str(x) + ".xhtml", lang='en')
     epubChapter.content = "<h2>" + currentChapterTitle + "</h2>" + str(content).replace('<div class="entry-content">\n', "").replace('\n </div>', "")
 
     book.add_item(epubChapter)
